@@ -1,3 +1,8 @@
+const EMAIL = localStorage.getItem("email")
+
+cargarPaginaPrincipal()
+
+
 // Definición de la clase Persona para almacenar los datos del usuario
 function Persona(sexo, edad, altura, pesoActual, anioSobrepeso, contextura) {
     this.sexo = sexo;
@@ -8,6 +13,20 @@ function Persona(sexo, edad, altura, pesoActual, anioSobrepeso, contextura) {
     this.contextura = contextura;
 }
 
+//Funcion para cargar pagina principa
+function cargarPaginaPrincipal() {
+    if (localStorage.getItem(EMAIL) !== null) {
+        let dataStorage = JSON.parse(localStorage.getItem(EMAIL))
+        cargarInformacionPersonal(dataStorage);
+        generarTabla(dataStorage.pesos);
+
+    } else {
+        //abro modal
+        var myModal = new bootstrap.Modal(document.getElementById('registoModal'))
+        myModal.show()
+    }
+
+}
 
 // Agregar un evento de escucha al formulario para manejar el envío
 document.querySelector("#form-calculo").addEventListener("submit", (e) => {
@@ -15,18 +34,24 @@ document.querySelector("#form-calculo").addEventListener("submit", (e) => {
     mostrarInformacionNutricional();
 });
 
+//Sale de la pagina principal
+document.getElementById("btn-salir").addEventListener("click", (e) => {
+    window.location.href = "./index.html";
+}); 
+
 // Función para mostrar la información nutricional después de la validación
 function mostrarInformacionNutricional() {
     // Obtener los valores de los inputs
-    let sexo = document.querySelector("#sexo").value;
-    let edad = parseInt(document.querySelector("#edad").value);
-    let altura = parseFloat(document.querySelector("#altura").value);
-    let contextura = document.querySelector("#contextura").value;
-    let pesoActual = parseFloat(document.querySelector("#peso").value);
-    let anioSobrepeso = parseInt(document.querySelector("#anios").value);
+    let sexo = document.querySelector("#sexo-input").value;
+    let edad = parseInt(document.querySelector("#edad-input").value);
+    let altura = parseFloat(document.querySelector("#altura-input").value);
+    let contextura = document.querySelector("#contextura-input").value;
+    let pesoActual = parseFloat(document.querySelector("#peso-input").value);
+    let anioSobrepeso = parseInt(document.querySelector("#anios-input").value);
 
     // Validar las entradas del usuario
     if (!validarEntradas(edad, contextura, pesoActual, anioSobrepeso)) {
+        console.log(edad, contextura, pesoActual, anioSobrepeso);
         alert("Por favor, ingresa valores válidos.");
         return;
     }
@@ -38,17 +63,26 @@ function mostrarInformacionNutricional() {
     let pesoIdeal = calcPesoIdeal(persona);
     let pesoPosible = calcPesoPosible(persona, pesoIdeal);
 
-    // Mostrar la información calculada en el HTML
-    document.getElementById("imc-text").innerText = imc;
-    document.getElementById("peso-actual-text").innerText = pesoActual + " kg";
-    document.getElementById("peso-ideal-text").innerText = pesoIdeal + " kg";
-    document.getElementById("peso-posible-text").innerText = (pesoPosible.toFixed(2) - 1) + " Kg - " + (pesoPosible.toFixed(2) + 1) + " Kg";
+    localStorage.setItem(EMAIL, JSON.stringify({
+        data: {
+            edad: persona.edad,
+            genero: persona.sexo,
+            altura: persona.altura,
+            contextura: persona.contextura,
+            anioSobrepeso: persona.anioSobrepeso,
+            pesoIdeal,
+            pesoPosible: (pesoPosible.toFixed(2) - 1) + " Kg - " + (pesoPosible.toFixed(2) + 1) + " Kg"
+        },
+        pesos: [
+            {
+                peso: pesoActual,
+                fecha: new Date(),
+                imc
+            }
+        ],
+    }))
 
-    document.getElementById("result-card1").removeAttribute("hidden");
-    document.getElementById("result-card2").removeAttribute("hidden");
-    let email = localStorage.getItem("email")
-    localStorage.setItem(email, JSON.stringify({ imc, pesoIdeal, pesoActual, fecha: new Date() }))
-    document.getElementById("form-calculo").reset();
+location.reload();
 }
 
 // Función para validar las entradas del usuario
@@ -100,8 +134,63 @@ function calcPesoPosible(persona, pesoIdeal) {
     return Number(pesoIdeal) + Number(kg1) + Number(kg2) + Number(kg3) + Number(kg4);
 }
 
+document.querySelector("#btn-guardar-registro").addEventListener("click", (e) => {
+    //Valido si no esta vacio 
+    let registro = document.getElementById("registro-peso").value;
 
-function cerrarSesion() {
-    localStorage.removeItem("emai");
-    window.location.href = "./index.html";
+    if (registro) {
+        cargarnNuevoRegistro(registro);
+    } else {
+        alert("Debe completar el formulario");
+    }
+});
+
+//Funcion para cargar un peso 
+function cargarnNuevoRegistro(peso) {
+    let dataStorage = JSON.parse(localStorage.getItem(EMAIL))
+
+    let imc = calcIMC({ ...dataStorage.data, pesoActual: peso })
+    dataStorage.pesos.push({
+        peso,
+        fecha: new Date(),
+        imc
+    })
+    localStorage.setItem(EMAIL, JSON.stringify(dataStorage));
+    location.reload();
 }
+
+
+//Funcion que muestra el historial de pesos
+function generarTabla(data) {
+    const table = document.getElementById("tableBody");
+    let rows = "";
+    for (let i = 0; i < data.length; i++) {
+        let fecha = formatearFecha(data[i].fecha);
+        let row = `<tr>
+                    <td>${fecha}</td>
+                    <td>${data[i].peso}</td>
+                    <td>${data[i].imc}</td>
+                </tr>`;
+        rows += row;
+    }
+    table.innerHTML = rows;
+}
+
+//Funcion que formatea una fecha al formato "dd/mm/yyyy".
+function formatearFecha(fecha) {
+    const [año, mes, dia] = fecha.split('T')[0].split('-');
+
+    return `${dia}/${mes}/${año}`;
+}
+
+//Funcion para cargar datos personales
+function cargarInformacionPersonal(data) {
+    document.getElementById("pesoPosible").textContent = data.data.pesoPosible;
+    document.getElementById("pesoIdeal").textContent = data.data.pesoIdeal;
+    document.getElementById("ultimoPeso").textContent = data.pesos[data.pesos.length - 1].peso;
+    document.getElementById("altura").textContent = data.data.altura; 
+    document.getElementById("edad").textContent = data.data.edad;
+    document.getElementById("genero").textContent = data.data.genero;
+    document.getElementById("contextura").textContent = data.data.contextura;
+}
+

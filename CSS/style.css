@@ -1,5 +1,5 @@
 html {
-    background: url("https://dl.dropboxusercontent.com/s/eht0zcv3ya92rtx/background.jpg?dl=0") no-repeat;
+    background: url("../IMG/varios-elementos-fitness-salud.jpg") no-repeat;
     background-size: cover;
     min-height: 100%;
 }
@@ -8,89 +8,12 @@ body {
     background-color: transparent;
 }
 
-#registration-form {
-    max-width: 800px;
-    margin-top: 100px;
+.login-row{
+    padding-top:15% ;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
-.card {
-    max-width: 775px;
-}
 
-.subtitle-card {
-    font-weight: 700;
-    color: #37474f;
-    margin-bottom: 0;
-}
-
-#registration-form .image {
-    float: left;
-    background-image: url("../IMG/varios-elementos-fitness-salud.jpg");
-    height: 500px;
-    width: 50%;
-    background-size: cover;
-    background-position: 25%;
-}
-
-.frm {
-    border-radius: 0 8px 8px 0;
-
-}
-
-#registration-form .frm {
-    float: left;
-    text-align: left;
-    height: 500px;
-    width: 50%;
-    min-width: 250px;
-    padding: 5px 35px;
-    background-size: 100% 100%;
-    background-color: white;
-
-}
-
-#registration-form h1 {
-    margin-top: 30px;
-    margin-bottom: 20px;
-}
-
-@media screen and (max-width: 700px) {
-    #registration-form .image {
-        width: 30%;
-        background-position: 60%;
-    }
-
-    #registration-form .frm {
-        width: 70%;
-    }
-
-    #registration-form .form-control {
-        width: 100%;
-    }
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-}
-
-@media screen and (max-width: 500px) {
-    #registration-form .image {
-        display: none;
-    }
-
-    #registration-form .frm {
-        width: 100%;
-    }
-
-    #registration-form h1 {
-        text-align: center;
-    }
-
-    #registration-form .btn {
-        width: 100%;
-        margin-top: 20px;
-    }
-}
-
-.card-login{padding: 2rem}

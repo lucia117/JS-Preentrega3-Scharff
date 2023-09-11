@@ -4,114 +4,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora</title>
+    <title>Control de pesos</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="./CSS/style.css">
+    <!-- Enlaces a hojas de estilo y fuentes externas -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="./CSS/main.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-12">
-            <div class="container " id="registration-form">
-                <div class="image"></div>
-                <div class="frm ">
-                    <h2>Calculadora de peso</h2>
-                    <form id="form-calculo">
-                        <!-- Genero  -->
-                        <div class="form-group">
-                            <label for="username">Genero</label>
-                            <select class="form-select" id="sexo" required="">
-                                <option value="">Selecciona...</option>
-                                <option value="F">Mujer</option>
-                                <option value="M">Hombre</option>
-                            </select>
-                        </div>
-                        <!-- Edad -->
-                        <div class="form-group">
-                            <label for="edad">Edad:</label>
-                            <input type="number" class="form-control input-number" id="edad" placeholder="" required="">
-                        </div>
-                        <!-- Altura -->
-                        <div class="form-group">
-                            <label for="altura">Altura:</label>
-                            <input type="number" class="form-control input-number" id="altura" placeholder=" cm"
-                                required="">
-                        </div>
-                        <!-- Contextura -->
-                        <div class="form-group">
-                            <label for="contextura">Contextura:</label>
-                            <select class="form-select" id="contextura" required="">
-                                <option value="">Selecciona...</option>
-                                <option value="C">Chica </option>
-                                <option value="M">Mediana</option>
-                                <option value="G">Grande</option>
-                            </select>
-                        </div>
-                        <!-- Peso -->
-                        <div class="form-group">
-                            <label for="pwd">Peso Actual:</label>
-                            <input type="number" class="form-control input-number" id="peso" placeholder="Kg"
-                                required="">
-                        </div>
-                        <!-- Años Sobrepeso -->
-                        <div class="form-group">
-                            <label for="anios">Años de Sobrepeso:</label>
-                            <input type="number" class="form-control input-number" id="anios" placeholder=""
-                                required="">
-                        </div>
-                        <div class="form-group ">
-                            <button type="submit" id="calcularBtn" class="btn btn-success btn-lg mt-2">Calcular</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="wrapper">
+        <nav class="right" id="sidebar">
 
-    <div class="row">
-        <div class="col-12">
-            <div id="result-card1" class="card container  mt-2 " hidden>
-                <div class="card-body">
-                    <h5 class="card-title text-center mb-3">Tu resultado personal</h5>
-                    <div class="row">
-                        <div class="col-md-3 text-center ">
-                            <p class="subtitle-card"> IMC personal</p>
-                            <span id="imc-text"></span>
+            <div class="container-menu">
+                <ul class="menu">
+                    <li>
+                        <a href="#" class="nav-link"><i class="bi bi-stars"></i>Inicio</a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link"><i class="bi bi-gear"></i>Perfil</a>
+                    </li>
+            </div>
+            <div class="bottom d-grid gap-2 col-6 mx-auto">
+                <button type="button" id="btn-salir" class="btn btn-outline-light"><i class="bi bi-door-closed"></i>Salir</button>
+
+            </div>
+        </nav>
+
+        <div id="content">
+            <nav class="top" id="content-nav">
+                <div>
+                    <a href="#" class="btn primary" id="btn-sidebar"></a>
+                </div>
+            </nav>
+            <div class="container-fluid mt-3">
+                <div class="row align-items-md-stretch">
+                    <div class="col-md-6 g-2">
+                        <div class="h-100 p-5  bg-body-tertiary border mt">
+                            <h3>Cargar nuevo registro</h>
+                                <label for="" class="col-form-label">Peso actual:</label>
+                                <input type="number" class="form-control" id="registro-peso">
+                                <button id="btn-guardar-registro" type="button" class="btn btn-primary btn-theme mt-3">
+                                    Guardar
+                                </button>
                         </div>
-                        <div class="col-md-3 text-center ">
-                            <p class="subtitle-card">Peso actual</p>
-                            <span id="peso-actual-text"></span>
+                    </div>
+
+                    <!-- Informacion personal -->
+                    <div class="col-md-6 g-2">
+                        <div class="h-100 p-5 bg-body-tertiary border ">
+                            <h3>Información Personal</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Peso Posible:</strong> <span id="pesoPosible">-</span> kg</p>
+                                    <p><strong>Peso Ideal:</strong> <span id="pesoIdeal">-</span> kg</p>
+                                    <p><strong>Último Peso:</strong> <span id="ultimoPeso">-</span> kg</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Altura:</strong> <span id="altura">-</span> cm</p>
+                                    <p><strong>Edad:</strong> <span id="edad">-</span> años</p>
+                                    <p><strong>Género:</strong> <span id="genero">-</span></p>
+                                    <p><strong>Contextura:</strong> <span id="contextura">-</span></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 text-center ">
-                            <p class="subtitle-card">Peso ideal</p>
-                            <span id="peso-ideal-text"></span>
+                    </div>
+
+                    <!-- Historial de registros -->
+                    <div class="col-md-12 g-2">
+                        <div class="h-100 p-5 bg-body-tertiary border ">
+                            <h3>Historial</h3>
+                            <div id="tablaContainer">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Fecha</th>
+                                            <th scope="col">Peso</th>
+                                            <th scope="col">IMC</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="col-md-3 text-center ">
-                            <p class="subtitle-card"> Rango de peso ideal</p>
-                            <span id="peso-posible-text"></span>
+                    </div>
+
+                    <!-- Sección de diagrama (próximamente) -->
+                    <div class="col-md-12 g-2">
+                        <div class="h-100 p-5 bg-body-tertiary border ">
+                            <h3>🕛 Proximamente diagrama...</h3>
                         </div>
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div id="result-card2" class="col-12" hidden>
-            <div class="card container-fluid mt-2" >
-                <div class="card-body">
-                    <p>Recuerda que estas fórmulas son solo estimaciones y no consideran la composición corporal. Además, cada persona es única, y lo más importante es mantener un peso saludable y un estilo de vida equilibrado a través de una dieta adecuada y actividad física regular. Consultar a un profesional de la salud puede brindarte una evaluación más precisa y personalizada para alcanzar tus objetivos de peso y bienestar.😊</p>
+    <!-- Modal para calcular peso -->
+    <div class="modal fade" id="registoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Calculadora de peso</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="container " id="registration-form">
+                            <div class="image"></div>
+                            <div class="frm ">
+                                <form id="form-calculo">
+                                    <!-- Genero  -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="username">Genero</label>
+                                        <select class="form-select" id="sexo-input" required="">
+                                            <option value="">Selecciona...</option>
+                                            <option value="F">Mujer</option>
+                                            <option value="M">Hombre</option>
+                                        </select>
+                                    </div>
+                                    <!-- Edad -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="edad">Edad:</label>
+                                        <input type="number" class="form-control input-number" id="edad-input"
+                                            placeholder="" required="">
+                                    </div>
+                                    <!-- Altura -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="altura">Altura:</label> <small class="text-muted">En
+                                            centinetros</small>
+                                        <input type="number" class="form-control input-number" id="altura-input"
+                                            placeholder=" cm" required="">
+                                    </div>
+                                    <!-- Contextura -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="contextura">Contextura:</label>
+                                        <select class="form-select" id="contextura-input" required="">
+                                            <option value="">Selecciona...</option>
+                                            <option value="C">Chica </option>
+                                            <option value="M">Mediana</option>
+                                            <option value="G">Grande</option>
+                                        </select>
+                                    </div>
+                                    <!-- Peso -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="pwd">Peso Actual:</label>
+                                        <input type="number" class="form-control input-number" id="peso-input"
+                                            placeholder="Kg" required="">
+                                    </div>
+                                    <!-- Años Sobrepeso -->
+                                    <div class="form-group">
+                                        <label class="mt-2" for="anios">Años de Sobrepeso:</label>
+                                        <input type="number" class="form-control input-number" id="anios-input"
+                                            placeholder="" required="">
+                                    </div>
+                                    <div class="form-group bottom d-grid gap-2 col-6 mx-auto ">
+
+                                        <button type="submit" id="calcularBtn"
+                                            class="btn btn-primary mt-2">Calcular</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+    <!-- Script de Bootstrap -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <!-- Scripts personalizados -->
+
     <script src="./JS/pesosycontextura.js"></script>
     <script src="./JS/main.js"></script>
 
